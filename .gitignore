@@ -1,0 +1,11 @@
+*.suo
+local.*
+temp.*
+debug.*
+obj
+bin
+release
+debug
+release-mono
+debug-mono
+*.userprefs

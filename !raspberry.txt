@@ -1,0 +1,6 @@
+open sftp://pi:pi@raspberrypi
+option transfer binary
+pwd
+put "debug\" filemask="*.exe;*.dll" ./
+close
+exit

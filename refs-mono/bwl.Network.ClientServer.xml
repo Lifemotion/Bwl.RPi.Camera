@@ -1,0 +1,209 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+bwl.Network.ClientServer
+</name>
+</assembly>
+<members>
+<member name="M:bwl.Network.ClientServer.SerialCableClient.ParseBytesInMessage(System.Boolean)">
+ <summary>
+ Обрабатывает байты в сообщении.
+ </summary>
+ <param name="broken"></param>
+ <remarks></remarks>
+</member>
+<member name="T:bwl.Network.ClientServer.NetClient">
+ <summary>
+ Клиент, работающий с сервером BWN по протоколу TCP\IP.
+ Поддерживает отправку\прием структурированных сообщений,
+ пинг сервера и т.д.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:bwl.Network.ClientServer.NetClient.DirectConnect(bwl.Network.ClientServer.NetServer)">
+ <summary>
+ Подключиться к классу сервера без использования сети.
+ </summary>
+ <param name="server">Класс сервера.</param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:bwl.Network.ClientServer.NetClient.Connect">
+ <summary>
+ Подключиться к сетевому серверу, передающему данные по протоколу BWN.
+ Используются адрес и порт, которые храняться в настройках.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:bwl.Network.ClientServer.NetClient.Connect(System.String,System.Int32)">
+ <summary>
+ Подключиться к сетевому серверу, передающему данные по протоколу BWN.
+ </summary>
+ <param name="host">Имя или адрес сервера.</param>
+ <param name="port">Порт TCP.</param>
+ <remarks></remarks>
+</member>
+<member name="M:bwl.Network.ClientServer.NetClient.Disconnect">
+ <summary>
+ Отключиться от сервера.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:bwl.Network.ClientServer.NetClient.IsConnected">
+ <summary>
+ Подключены ли мы сейчас к серверу.
+ </summary>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:bwl.Network.ClientServer.NetClient.ParseBytesInMessage(System.Boolean)">
+ <summary>
+ Обрабатывает байты в сообщении.
+ </summary>
+ <param name="broken"></param>
+ <remarks></remarks>
+</member>
+<member name="E:bwl.Network.ClientServer.NetClient.Connected">
+ <summary>
+ Завершено успешное подключение к серверу.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="E:bwl.Network.ClientServer.NetClient.Disonnected">
+ <summary>
+ Отключились от сервера.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="E:bwl.Network.ClientServer.NetClient.SentMessage">
+ <summary>
+ Серверу было отправлено сообщение.
+ </summary>
+ <param name="message">Ссылка на сообещние.</param>
+ <remarks></remarks>
+</member>
+<member name="E:bwl.Network.ClientServer.NetClient.ReceivedMessage">
+ <summary>
+ Было принято сообщение от сервера.
+ </summary>
+ <param name="message"></param>
+ <remarks></remarks>
+</member>
+<member name="M:bwl.Network.ClientServer.NetClient.SendMessage(bwl.Network.ClientServer.NetMessage)">
+ <summary>
+ Отправить серверу сообщение.
+ </summary>
+ <param name="message">Сообщение.</param>
+ <remarks></remarks>
+</member>
+<member name="M:bwl.Network.ClientServer.NetClient.SendMessageWaitAnswer(bwl.Network.ClientServer.NetMessage,System.String,System.Single)">
+ <summary>
+ Отправляет сообщение и ждет ответа.
+ Выполняется синхронно.
+ </summary>
+ <param name="message">Сетевое сообщение</param>
+ <param name="answerFirstPart">Первое поле ответа (регистр не важен).</param>
+ <param name="timeout">Максимальное время ожидания в секундах.</param>
+ <returns>Сообщение-ответ или Nothing, если ответ не пришел.</returns>
+ <remarks></remarks>
+</member>
+<member name="M:bwl.Network.ClientServer.NetClient.DirectMessageReceive(bwl.Network.ClientServer.NetMessage)">
+ <summary>
+ Принимает сообщение напрямую от объекта-сервера без использования сети.
+ </summary>
+ <param name="message"></param>
+ <remarks></remarks>
+</member>
+<member name="M:bwl.Network.ClientServer.NetMessage.CodeBytes(System.Byte[])">
+ <summary>
+ Кодирует последовательность байтов так, что в ней больше не встречаются символы двоеточия и все байты меньше 6.
+ </summary>
+ <param name="bytes"></param>
+ <returns></returns>
+ <remarks>
+ Каждый указанный байт заменяется на два: #5 и #(N+6)
+ </remarks>
+ 
+</member>
+<member name="T:bwl.Network.ClientServer.ConnectedClient">
+ <summary>
+ Класс, представляющий подключившегося клиента.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="T:bwl.Network.ClientServer.NetServer">
+ <summary>
+ Сервер TCP, ожидающий подключений от NetClient.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:bwl.Network.ClientServer.NetServer.StartServer(System.Int32)">
+ <summary>
+ Запускает сервер. При успешном вызове сервер ждет подключения клиентов.
+ </summary>
+ <param name="incomingPort">TCP - порт, подключения к которому будут приниматься.</param>
+ <remarks></remarks>
+</member>
+<member name="M:bwl.Network.ClientServer.NetServer.StartServerEmulationOnly">
+ <summary>
+ Запускает сервер в режиме эмуляции, реальное сетевое соединение не используется.
+ </summary>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:bwl.Network.ClientServer.NetServer.StopServer">
+ <summary>
+ Остановить сервер.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="P:bwl.Network.ClientServer.NetServer.IsWorking">
+ <summary>
+ Запущен ли сервер и принимает ли он подключения.
+ </summary>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:bwl.Network.ClientServer.NetServer.ParseBytesInMessage(bwl.Network.ClientServer.ClientData,System.Boolean)">
+ <summary>
+ Обрабатывает байты в сообщении.
+ </summary>
+ <param name="client"></param>
+ <param name="broken"></param>
+ <remarks></remarks>
+</member>
+<member name="M:bwl.Network.ClientServer.NetServer.SendMessage(bwl.Network.ClientServer.ConnectedClient,bwl.Network.ClientServer.NetMessage)">
+ <summary>
+ Отправить сообщение клиенту, если известен объект указывающий клиента.
+ </summary>
+ <param name="client"></param>
+ <param name="message"></param>
+ <remarks></remarks>
+</member>
+<member name="M:bwl.Network.ClientServer.NetServer.SendMessage(System.Int32,bwl.Network.ClientServer.NetMessage)">
+ <summary>
+ Отправить сообщение клиенту, если известен идентификатор, указывающий клиента.
+ </summary>
+ <param name="clientID">Идентификатор ID объекта ConnectedClient</param>
+ <param name="message"></param>
+ <remarks></remarks>
+</member>
+<member name="T:bwl.Network.ClientServer.My.Resources.Resources">
+<summary>
+  Класс ресурса со строгой типизацией для поиска локализованных строк и т.д.
+</summary>
+</member>
+<member name="P:bwl.Network.ClientServer.My.Resources.Resources.ResourceManager">
+<summary>
+  Возвращает кэшированный экземпляр ResourceManager, использованный этим классом.
+</summary>
+</member>
+<member name="P:bwl.Network.ClientServer.My.Resources.Resources.Culture">
+<summary>
+  Перезаписывает свойство CurrentUICulture текущего потока для всех
+  обращений к ресурсу с помощью этого класса ресурса со строгой типизацией.
+</summary>
+</member>
+</members>
+</doc>
