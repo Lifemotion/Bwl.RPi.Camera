@@ -7,6 +7,7 @@ Module App
     Dim _logger As New Logger
     Dim _appFormDescriptor As New AutoFormDescriptor(_ui, "form") With {.ShowLogger = True, .LoggerExtended = False, .FormWidth = 950, .FormHeight = 920}
     Dim WithEvents _frame As New AutoBitmap(_ui, "Frame")
+    Dim WithEvents _initParams As New AutoTextbox(_ui, "Parameters")
     Dim WithEvents _initButton As New AutoButton(_ui, "Init")
     Dim WithEvents _captureButton As New AutoButton(_ui, "Capture")
     Dim WithEvents _testSpeedButton As New AutoButton(_ui, "TestSpeed")
@@ -17,15 +18,16 @@ Module App
 
     Sub Main()
         _frame.Info.Width = 640
-        _frame.Info.Height = 640
+        _frame.Info.Height = 480
+        _initParams.Text = "640,480"
         Do While _running
-            Threading.Thread.Sleep(500)
-            If Console.KeyAvailable Then
-                Dim key = Console.ReadKey
-                If key.Key = ConsoleKey.Escape Then _running = False
-            End If
-        Loop
-        If _cam IsNot Nothing Then _cam.Close()
+                Threading.Thread.Sleep(500)
+                If Console.KeyAvailable Then
+                    Dim key = Console.ReadKey
+                    If key.Key = ConsoleKey.Escape Then _running = False
+                End If
+            Loop
+            If _cam IsNot Nothing Then _cam.Close()
     End Sub
 
     Private Sub _exitButton_Click(source As AutoButton) Handles _exitButton.Click
@@ -59,6 +61,7 @@ Module App
 
     Private Sub _initButton_Click(source As AutoButton) Handles _initButton.Click
         If _cam IsNot Nothing Then _cam.Close()
-        _cam = New RpiCam(1024, 768)
+        Dim parts = _initParams.Text.Split(",")
+        _cam = New RpiCam(CInt(parts(0)), CInt(parts(1)))
     End Sub
 End Module

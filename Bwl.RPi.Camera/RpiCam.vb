@@ -4,6 +4,7 @@ Imports System.IO
 
 Public Class RpiCam
     Implements IDisposable
+    Implements IRpiCam
 
     Private ReadOnly _prc As Process
     Private ReadOnly _buffer As Byte()
@@ -24,7 +25,7 @@ Public Class RpiCam
         _prc.Start()
     End Sub
 
-    Public Function GetFrameAsBitmap() As Image
+    Public Function GetFrameAsBitmap() As Bitmap Implements IRpiCam.GetFrameAsBitmap
         GetFrameAsBytes()
         Try
             Using m = New MemoryStream(_buffer)
@@ -35,7 +36,7 @@ Public Class RpiCam
         End Try
     End Function
 
-    Public Function GetFrameAsBytes() As Byte()
+    Public Function GetFrameAsBytes() As Byte() Implements IRpiCam.GetFrameAsBytes
         _prc.StandardOutput.DiscardBufferedData()
         _prc.StandardInput.WriteLine(vbLf)
 
@@ -50,14 +51,14 @@ Public Class RpiCam
     ''' <summary>
     ''' Finishes raspistill
     ''' </summary>
-    Public Sub Close()
+    Public Sub Close() Implements IRpiCam.Close
         Try
             _prc.Kill()
         Catch
         End Try
     End Sub
 
-    Public Sub Dispose() Implements IDisposable.Dispose
+    Public Sub Dispose() Implements IDisposable.Dispose, IRpiCam.Dispose
         Close()
     End Sub
 

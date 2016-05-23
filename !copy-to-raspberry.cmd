@@ -1,1 +1,1 @@
-"C:\Program Files (x86)\WinSCP\winscp.com" /script=raspberry.txt
+"C:\Program Files (x86)\WinSCP\winscp.com" /script=!raspberry.txt
