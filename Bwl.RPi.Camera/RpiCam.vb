@@ -8,28 +8,36 @@ Public Class RpiCam
 
     Private ReadOnly _prc As Process
     Private ReadOnly _buffer As Byte()
+    Private _width As Integer
+    Private _height As Integer
 
     Public Sub New()
         Me.New(1920, 1080)
     End Sub
 
     Public Sub New(width As Integer, height As Integer)
+        _width = width
+        _height = height
         _buffer = New Byte((width * height * 3) + 53) {}
-        _prc = New Process
-        _prc.StartInfo.FileName = "raspistill"
-        _prc.StartInfo.Arguments = "-e bmp -h " + height.ToString + " -w " + width.ToString + " -n -t 999999999 -k -o -"
-        _prc.StartInfo.RedirectStandardError = False
-        _prc.StartInfo.RedirectStandardInput = True
-        _prc.StartInfo.RedirectStandardOutput = True
-        _prc.StartInfo.UseShellExecute = False
-        _prc.Start()
+        If System.Environment.OSVersion.Platform = PlatformID.Unix Then
+            _prc = New Process
+            _prc.StartInfo.FileName = "raspistill"
+            _prc.StartInfo.Arguments = "-e bmp -h " + height.ToString + " -w " + width.ToString + " -n -t 999999999 -k -o -"
+            _prc.StartInfo.RedirectStandardError = False
+            _prc.StartInfo.RedirectStandardInput = True
+            _prc.StartInfo.RedirectStandardOutput = True
+            _prc.StartInfo.UseShellExecute = False
+            _prc.Start()
+        Else
+
+        End If
     End Sub
 
     Public Function GetFrameAsBitmap() As Bitmap Implements IRpiCam.GetFrameAsBitmap
-        GetFrameAsBytes()
+        Dim buff = GetFrameAsBytes()
         Try
-            Using m = New MemoryStream(_buffer)
-                Return Image.FromStream(m)
+            Using m = New MemoryStream(buff)
+                Return Bitmap.FromStream(m)
             End Using
         Catch
             Return Nothing
@@ -37,15 +45,30 @@ Public Class RpiCam
     End Function
 
     Public Function GetFrameAsBytes() As Byte() Implements IRpiCam.GetFrameAsBytes
-        _prc.StandardOutput.DiscardBufferedData()
-        _prc.StandardInput.WriteLine(vbLf)
+        If System.Environment.OSVersion.Platform = PlatformID.Unix Then
+            _prc.StandardOutput.DiscardBufferedData()
+            _prc.StandardInput.WriteLine(vbLf)
 
-        Dim totalBytes = 0
-        Do
-            totalBytes += _prc.StandardOutput.BaseStream.Read(_buffer, totalBytes, _buffer.Length - totalBytes)
-        Loop While totalBytes < _buffer.Length
+            Dim totalBytes = 0
+            Do
+                totalBytes += _prc.StandardOutput.BaseStream.Read(_buffer, totalBytes, _buffer.Length - totalBytes)
+            Loop While totalBytes < _buffer.Length
 
-        Return _buffer
+            Return _buffer
+        Else
+            Dim testJpg = My.Resources.cat
+            Return testJpg
+
+            Dim bmp As New Bitmap(New IO.MemoryStream(testJpg))
+            Dim resized = New Bitmap(bmp, _width, _height)
+            Dim ms As New IO.MemoryStream
+            resized.Save(ms, Imaging.ImageFormat.Jpeg)
+            bmp.Dispose()
+            resized.Dispose()
+            ms.Flush()
+            Dim bytes = ms.ToArray
+            Return bytes
+        End If
     End Function
 
     ''' <summary>
