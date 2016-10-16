@@ -6,6 +6,22 @@ Bwl.Framework
 </name>
 </assembly>
 <members>
+<member name="T:Bwl.Framework.My.Resources.Resources">
+<summary>
+  Класс ресурса со строгой типизацией для поиска локализованных строк и т.д.
+</summary>
+</member>
+<member name="P:Bwl.Framework.My.Resources.Resources.ResourceManager">
+<summary>
+  Возвращает кэшированный экземпляр ResourceManager, использованный этим классом.
+</summary>
+</member>
+<member name="P:Bwl.Framework.My.Resources.Resources.Culture">
+<summary>
+  Перезаписывает свойство CurrentUICulture текущего потока для всех
+  обращений к ресурсу с помощью этого класса ресурса со строгой типизацией.
+</summary>
+</member>
 <member name="M:Bwl.Framework.CryptoTools.Des3Encode(System.String,System.Byte[])">
  <summary>
  
@@ -28,6 +44,16 @@ Bwl.Framework
  <param name="filename">
  Имя файла с расширением и путем.
  </param>
+ <remarks></remarks>
+</member>
+<member name="M:Bwl.Framework.IniFile.GetSettingNoWrite(System.String,System.String,System.String)">
+ <summary>
+ Читает значение параметра. Если параметр не найден, возвращает заданную строку. Только чтение, ничего не пишет.
+ </summary>
+ <param name="groupName">Имя группы параметров в ini-файле.</param>
+ <param name="paramName">Имя параметра.</param>
+ <param name="returnIsNotExist">Что возвращает, если параметр не найден.</param>
+ <returns>Значение параметра.</returns>
  <remarks></remarks>
 </member>
 <member name="M:Bwl.Framework.IniFile.GetSetting(System.String,System.String,System.String,System.String)">
@@ -107,169 +133,6 @@ Bwl.Framework
  </summary>
  <remarks></remarks>
 </member>
-<member name="T:Bwl.Framework.My.Resources.Resources">
-<summary>
-  Класс ресурса со строгой типизацией для поиска локализованных строк и т.д.
-</summary>
-</member>
-<member name="P:Bwl.Framework.My.Resources.Resources.ResourceManager">
-<summary>
-  Возвращает кэшированный экземпляр ResourceManager, использованный этим классом.
-</summary>
-</member>
-<member name="P:Bwl.Framework.My.Resources.Resources.Culture">
-<summary>
-  Перезаписывает свойство CurrentUICulture текущего потока для всех
-  обращений к ресурсу с помощью этого класса ресурса со строгой типизацией.
-</summary>
-</member>
-<member name="T:Bwl.Framework.NetClientSimple">
- <summary>
- Клиент, работающий с сервером BWN по протоколу TCP\IP.
- Поддерживает отправку\прием структурированных сообщений,
- пинг сервера и т.д.
- </summary>
- <remarks></remarks>
-</member>
-<member name="M:Bwl.Framework.NetClientSimple.Connect(System.String,System.Int32)">
- <summary>
- Подключиться к сетевому серверу, передающему данные по протоколу BWN.
- </summary>
- <param name="host">Имя или адрес сервера.</param>
- <param name="port">Порт TCP.</param>
- <remarks></remarks>
-</member>
-<member name="M:Bwl.Framework.NetClientSimple.Disconnect">
- <summary>
- Отключиться от сервера.
- </summary>
- <remarks></remarks>
-</member>
-<member name="M:Bwl.Framework.NetClientSimple.IsConnected">
- <summary>
- Подключены ли мы сейчас к серверу.
- </summary>
- <returns></returns>
- <remarks></remarks>
-</member>
-<member name="M:Bwl.Framework.NetClientSimple.ParseBytesInMessage(System.Boolean)">
- <summary>
- Обрабатывает байты в сообщении.
- </summary>
- <param name="broken"></param>
- <remarks></remarks>
-</member>
-<member name="E:Bwl.Framework.NetClientSimple.Connected">
- <summary>
- Завершено успешное подключение к серверу.
- </summary>
- <remarks></remarks>
-</member>
-<member name="E:Bwl.Framework.NetClientSimple.Disonnected">
- <summary>
- Отключились от сервера.
- </summary>
- <remarks></remarks>
-</member>
-<member name="E:Bwl.Framework.NetClientSimple.SentMessage">
- <summary>
- Серверу было отправлено сообщение.
- </summary>
- <param name="message">Ссылка на сообещние.</param>
- <remarks></remarks>
-</member>
-<member name="E:Bwl.Framework.NetClientSimple.ReceivedMessage">
- <summary>
- Было принято сообщение от сервера.
- </summary>
- <param name="message"></param>
- <remarks></remarks>
-</member>
-<member name="M:Bwl.Framework.NetClientSimple.SendMessage(Bwl.Framework.NetMessageSimple)">
- <summary>
- Отправить серверу сообщение.
- </summary>
- <param name="message">Сообщение.</param>
- <remarks></remarks>
-</member>
-<member name="M:Bwl.Framework.NetClientSimple.SendMessageWaitAnswer(Bwl.Framework.NetMessageSimple,System.String,System.Single)">
- <summary>
- Отправляет сообщение и ждет ответа.
- Выполняется синхронно.
- </summary>
- <param name="message">Сетевое сообщение</param>
- <param name="answerFirstPart">Первое поле ответа (регистр не важен).</param>
- <param name="timeout">Максимальное время ожидания в секундах.</param>
- <returns>Сообщение-ответ или Nothing, если ответ не пришел.</returns>
- <remarks></remarks>
-</member>
-<member name="M:Bwl.Framework.NetMessageSimple.CodeBytes(System.Byte[])">
- <summary>
- Кодирует последовательность байтов так, что в ней больше не встречаются символы двоеточия и все байты меньше 6.
- </summary>
- <param name="bytes"></param>
- <returns></returns>
- <remarks>
- Каждый указанный байт заменяется на два: #5 и #(N+6)
- </remarks>
- 
-</member>
-<member name="T:Bwl.Framework.ConnectedClientSimple">
- <summary>
- Класс, представляющий подключившегося клиента.
- </summary>
- <remarks></remarks>
-</member>
-<member name="T:Bwl.Framework.NetServerSimple">
- <summary>
- Сервер TCP, ожидающий подключений от NetClient.
- </summary>
- <remarks></remarks>
-</member>
-<member name="M:Bwl.Framework.NetServerSimple.StartServer(System.Int32,System.Boolean)">
- <summary>
- Запускает сервер. При успешном вызове сервер ждет подключения клиентов.
- </summary>
- <param name="incomingPort">TCP - порт, подключения к которому будут приниматься.</param>
- <remarks></remarks>
-</member>
-<member name="M:Bwl.Framework.NetServerSimple.StopServer">
- <summary>
- Остановить сервер.
- </summary>
- <remarks></remarks>
-</member>
-<member name="M:Bwl.Framework.NetServerSimple.IsWorking">
- <summary>
- Запущен ли сервер и принимает ли он подключения.
- </summary>
- <returns></returns>
- <remarks></remarks>
-</member>
-<member name="M:Bwl.Framework.NetServerSimple.ParseBytesInMessage(Bwl.Framework.ClientDataSimple,System.Boolean)">
- <summary>
- Обрабатывает байты в сообщении.
- </summary>
- <param name="client"></param>
- <param name="broken"></param>
- <remarks></remarks>
-</member>
-<member name="M:Bwl.Framework.NetServerSimple.SendMessage(Bwl.Framework.ConnectedClientSimple,Bwl.Framework.NetMessageSimple)">
- <summary>
- Отправить сообщение клиенту, если известен объект указывающий клиента.
- </summary>
- <param name="client"></param>
- <param name="message"></param>
- <remarks></remarks>
-</member>
-<member name="M:Bwl.Framework.NetServerSimple.SendMessage(System.Int32,Bwl.Framework.NetMessageSimple)">
- <summary>
- Отправить сообщение клиенту, если известен идентификатор, указывающий клиента.
- </summary>
- <param name="clientID">Идентификатор ID объекта ConnectedClient</param>
- <param name="message"></param>
- <remarks></remarks>
-</member>
 <member name="P:Bwl.Framework.PasswordSetting.Value">
  <summary>
  Не является парллем, используйте поле Pass.
@@ -300,6 +163,14 @@ Bwl.Framework
  <remarks></remarks>
 </member>
 <member name="M:Bwl.Framework.SettingsStorageRoot.#ctor(System.String,System.String)">
+ <summary>
+ Создать новое хранилище настроек, являющееся корневым.
+ </summary>
+ <param name="iniFileName">Имя ini-файла с настройками.</param>
+ <param name="rootCategoryName">Имя корневой категории настроек.</param>
+ <remarks></remarks>
+</member>
+<member name="M:Bwl.Framework.SettingsStorageRoot.#ctor(System.String,System.String,System.Boolean)">
  <summary>
  Создать новое хранилище настроек, являющееся корневым.
  </summary>

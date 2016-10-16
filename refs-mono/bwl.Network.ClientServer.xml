@@ -6,12 +6,21 @@ bwl.Network.ClientServer
 </name>
 </assembly>
 <members>
-<member name="M:bwl.Network.ClientServer.SerialCableClient.ParseBytesInMessage(System.Boolean)">
- <summary>
- Обрабатывает байты в сообщении.
- </summary>
- <param name="broken"></param>
- <remarks></remarks>
+<member name="T:bwl.Network.ClientServer.My.Resources.Resources">
+<summary>
+  Класс ресурса со строгой типизацией для поиска локализованных строк и т.д.
+</summary>
+</member>
+<member name="P:bwl.Network.ClientServer.My.Resources.Resources.ResourceManager">
+<summary>
+  Возвращает кэшированный экземпляр ResourceManager, использованный этим классом.
+</summary>
+</member>
+<member name="P:bwl.Network.ClientServer.My.Resources.Resources.Culture">
+<summary>
+  Перезаписывает свойство CurrentUICulture текущего потока для всех
+  обращений к ресурсу с помощью этого класса ресурса со строгой типизацией.
+</summary>
 </member>
 <member name="T:bwl.Network.ClientServer.NetClient">
  <summary>
@@ -36,6 +45,13 @@ bwl.Network.ClientServer
  </summary>
  <remarks></remarks>
 </member>
+<member name="M:bwl.Network.ClientServer.NetClient.Connect(System.String,System.String)">
+ <summary>
+ Подключиться к сетевому серверу, передающему данные по протоколу BWN.
+ </summary>
+ <param name="address">Адрес в формате host:port</param>
+ <param name="options">Не используется</param>
+</member>
 <member name="M:bwl.Network.ClientServer.NetClient.Connect(System.String,System.Int32)">
  <summary>
  Подключиться к сетевому серверу, передающему данные по протоколу BWN.
@@ -50,7 +66,7 @@ bwl.Network.ClientServer
  </summary>
  <remarks></remarks>
 </member>
-<member name="M:bwl.Network.ClientServer.NetClient.IsConnected">
+<member name="P:bwl.Network.ClientServer.NetClient.IsConnected">
  <summary>
  Подключены ли мы сейчас к серверу.
  </summary>
@@ -70,7 +86,7 @@ bwl.Network.ClientServer
  </summary>
  <remarks></remarks>
 </member>
-<member name="E:bwl.Network.ClientServer.NetClient.Disonnected">
+<member name="E:bwl.Network.ClientServer.NetClient.Disconnected">
  <summary>
  Отключились от сервера.
  </summary>
@@ -138,6 +154,13 @@ bwl.Network.ClientServer
  </summary>
  <remarks></remarks>
 </member>
+<member name="M:bwl.Network.ClientServer.NetServer.StartServer(System.String,System.String)">
+ <summary>
+ Запускает сервер. При успешном вызове сервер ждет подключения клиентов.
+ </summary>
+ <param name="address">Адрес в формате host:port, значение host не используется, рекомендуется формат *:port</param>
+ <param name="options">Не используется</param>
+</member>
 <member name="M:bwl.Network.ClientServer.NetServer.StartServer(System.Int32)">
  <summary>
  Запускает сервер. При успешном вызове сервер ждет подключения клиентов.
@@ -189,21 +212,19 @@ bwl.Network.ClientServer
  <param name="message"></param>
  <remarks></remarks>
 </member>
-<member name="T:bwl.Network.ClientServer.My.Resources.Resources">
-<summary>
-  Класс ресурса со строгой типизацией для поиска локализованных строк и т.д.
-</summary>
+<member name="M:bwl.Network.ClientServer.NetServer.SendMessage(bwl.Network.ClientServer.NetMessage)">
+ <summary>
+ Отправить сообщение, используя внутреннее поле ToID
+ </summary>
+ <param name="message"></param>
 </member>
-<member name="P:bwl.Network.ClientServer.My.Resources.Resources.ResourceManager">
-<summary>
-  Возвращает кэшированный экземпляр ResourceManager, использованный этим классом.
-</summary>
-</member>
-<member name="P:bwl.Network.ClientServer.My.Resources.Resources.Culture">
-<summary>
-  Перезаписывает свойство CurrentUICulture текущего потока для всех
-  обращений к ресурсу с помощью этого класса ресурса со строгой типизацией.
-</summary>
+<member name="M:bwl.Network.ClientServer.NetServer.RegisterMe(System.String,System.String,System.String,System.String)">
+ <summary>
+ Для сервера это не имеет смысла.
+ </summary>
+ <param name="id"></param>
+ <param name="password"></param>
+ <param name="options"></param>
 </member>
 </members>
 </doc>
