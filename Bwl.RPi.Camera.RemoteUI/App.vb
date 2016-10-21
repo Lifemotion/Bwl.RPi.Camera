@@ -62,6 +62,6 @@ Module App
     Private Sub _initButton_Click(source As AutoButton) Handles _initButton.Click
         If _cam IsNot Nothing Then _cam.Close()
         Dim parts = _initParams.Text.Split(",")
-        _cam = New RpiCam(CInt(parts(0)), CInt(parts(1)))
+        _cam = New RpiCam(CInt(parts(0)), CInt(parts(1)), "")
     End Sub
 End Module

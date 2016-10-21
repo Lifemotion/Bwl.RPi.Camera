@@ -4,35 +4,35 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{9C6217E4-AA6A-4F85-93F3-7B55E24D7C85}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <StartupObject>
-    </StartupObject>
-    <RootNamespace>Bwl.RPi.Camera</RootNamespace>
-    <AssemblyName>Bwl.RPi.Camera</AssemblyName>
+    <ProjectGuid>{AE15D142-EE13-44BB-BF84-4147C8201D4B}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <StartupObject>Sub Main</StartupObject>
+    <RootNamespace>Bwl.RPi.Camera.Test</RootNamespace>
+    <AssemblyName>Bwl.RPi.Camera.Test</AssemblyName>
     <FileAlignment>512</FileAlignment>
-    <MyType>Windows</MyType>
+    <MyType>Console</MyType>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <OutputPath>..\debug\bwl-rpi-cam\</OutputPath>
-    <DocumentationFile>Bwl.RPi.Camera.xml</DocumentationFile>
+    <DocumentationFile>Bwl.RPi.Camera.Test.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <DefineDebug>false</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
-    <OutputPath>..\debug\bwl-rpi-cam\</OutputPath>
-    <DocumentationFile>Bwl.RPi.Camera.xml</DocumentationFile>
+    <OutputPath>..\release\bwl-rpi-cam\</OutputPath>
+    <DocumentationFile>Bwl.RPi.Camera.Test.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
@@ -50,20 +50,19 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Import Include="Microsoft.VisualBasic" />
     <Import Include="System" />
     <Import Include="System.Collections" />
     <Import Include="System.Collections.Generic" />
+    <Import Include="System.Diagnostics" />
     <Import Include="System.Linq" />
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IRpiCam.vb" />
+    <Compile Include="App.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -79,7 +78,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="RpiCam.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">
@@ -99,7 +97,12 @@
       <CustomToolNamespace>My</CustomToolNamespace>
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
-    <None Include="Resources\cat" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Bwl.RPi.Camera\Bwl.RPi.Camera.vbproj">
+      <Project>{9c6217e4-aa6a-4f85-93f3-7b55e24d7c85}</Project>
+      <Name>Bwl.RPi.Camera</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
