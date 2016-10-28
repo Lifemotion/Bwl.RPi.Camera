@@ -2,7 +2,7 @@
 Imports Bwl.Network.ClientServer
 
 Module App
-    Dim _cam As RpiCam
+    Dim _cam As RpiCamStill
     Dim _ui As New AutoUI
     Dim _logger As New Logger
     Dim _appFormDescriptor As New AutoFormDescriptor(_ui, "form") With {.ShowLogger = True, .LoggerExtended = False, .FormWidth = 950, .FormHeight = 920}
@@ -62,6 +62,6 @@ Module App
     Private Sub _initButton_Click(source As AutoButton) Handles _initButton.Click
         If _cam IsNot Nothing Then _cam.Close()
         Dim parts = _initParams.Text.Split(",")
-        _cam = New RpiCam(CInt(parts(0)), CInt(parts(1)), "")
+        _cam = New RpiCamStill(CInt(parts(0)), CInt(parts(1)), "")
     End Sub
 End Module

@@ -1,8 +1,9 @@
 ﻿Imports System.Diagnostics
 Imports System.Drawing
 Imports System.IO
+Imports Bwl.RPi.Camera
 
-Public Class RpiCam
+Public Class RpiCamStill
     Implements IDisposable
     Implements IRpiCam
 
@@ -10,6 +11,15 @@ Public Class RpiCam
     Private ReadOnly _buffer As Byte()
     Private _width As Integer
     Private _height As Integer
+    Private _counter As Integer
+
+    Public ReadOnly Property FrameCounter As Integer Implements IRpiCam.FrameCounter
+        Get
+            Return _counter
+        End Get
+    End Property
+
+    Public ReadOnly Property LastFrameBytesLength As Integer Implements IRpiCam.LastFrameBytesLength
 
     Public Sub New()
         Me.New(1920, 1080, "")
@@ -66,21 +76,14 @@ Public Class RpiCam
             If totalBytes < _buffer.Length Then
                 Throw New Exception("Buffer not full, capture failed")
             Else
+                _counter += 1
+                _LastFrameBytesLength = _buffer.Length
                 Return _buffer
             End If
         Else
             Dim testJpg = My.Resources.cat
+            _LastFrameBytesLength = testJpg.Length
             Return testJpg
-
-            Dim bmp As New Bitmap(New IO.MemoryStream(testJpg))
-            Dim resized = New Bitmap(bmp, _width, _height)
-            Dim ms As New IO.MemoryStream
-            resized.Save(ms, Imaging.ImageFormat.Jpeg)
-            bmp.Dispose()
-            resized.Dispose()
-            ms.Flush()
-            Dim bytes = ms.ToArray
-            Return bytes
         End If
     End Function
 
