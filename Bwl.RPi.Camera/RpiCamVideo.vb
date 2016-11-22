@@ -61,7 +61,7 @@ Public Class RpiCamVideo
     Public ReadOnly Property LastFrameBytesLength As Integer Implements IRpiCam.LastFrameBytesLength
 
     Public Sub New()
-        Me.New(640, 480, 30, "")
+        Me.New(640, 480, 0, "")
     End Sub
 
     Public Sub New(width As Integer, height As Integer, maxFrameRate As Integer, options As String)
@@ -79,16 +79,25 @@ Public Class RpiCamVideo
             Threading.Thread.Sleep(500)
             _prc = New Process
             _prc.StartInfo.FileName = "raspivid"
-            _prc.StartInfo.Arguments = "-cd MJPEG -h " + height.ToString + " -w " + width.ToString + " -fps " + maxFrameRate.ToString + " -n -t 999999999 " + options + "-o -"
+            Dim args = "-cd MJPEG -h " + height.ToString + " -w " + width.ToString
+            If maxFrameRate > 0 Then
+                args += " -fps " + maxFrameRate.ToString
+            End If
+            args += " -n -t 999999999"
+            If options IsNot Nothing AndAlso options > "" Then
+                args += " " + options
+            End If
+            args += " -o -"
+            _prc.StartInfo.Arguments = args
             _prc.StartInfo.RedirectStandardError = False
             _prc.StartInfo.RedirectStandardInput = True
-            _prc.StartInfo.RedirectStandardOutput = True
-            _prc.StartInfo.UseShellExecute = False
-            _prc.Start()
-            _readThread.Start()
-        Else
+                _prc.StartInfo.RedirectStandardOutput = True
+                _prc.StartInfo.UseShellExecute = False
+                _prc.Start()
+                _readThread.Start()
+            Else
 
-        End If
+            End If
     End Sub
 
     Public Function GetFrameAsBitmap() As Bitmap Implements IRpiCam.GetFrameAsBitmap
@@ -130,12 +139,12 @@ Public Class RpiCamVideo
     ''' </summary>
     Public Sub Close() Implements IRpiCam.Close
         Try
-            _prc.Kill()
+            _readThread.Abort()
         Catch
         End Try
 
         Try
-            _readThread.Abort()
+            _prc.Kill()
         Catch
         End Try
     End Sub

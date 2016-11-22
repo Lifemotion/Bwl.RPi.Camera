@@ -4,13 +4,13 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{42770EE1-5A67-4649-8451-AF3081986E56}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <StartupObject>Sub Main</StartupObject>
-    <RootNamespace>Bwl.RPi.Camera.TestVideo</RootNamespace>
-    <AssemblyName>Bwl.RPi.Camera.TestVideo</AssemblyName>
+    <ProjectGuid>{7C07D008-EDF8-4032-856E-7CEEB2D98B77}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <StartupObject>Bwl.RPi.Camera.RemoteReceiver.My.MyApplication</StartupObject>
+    <RootNamespace>Bwl.RPi.Camera.RemoteReceiver</RootNamespace>
+    <AssemblyName>Bwl.RPi.Camera.RemoteReceiver</AssemblyName>
     <FileAlignment>512</FileAlignment>
-    <MyType>Console</MyType>
+    <MyType>WindowsForms</MyType>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -19,8 +19,8 @@
     <DebugType>full</DebugType>
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
-    <OutputPath>..\debug\bwl-rpi-cam-test\</OutputPath>
-    <DocumentationFile>Bwl.RPi.Camera.TestVideo.xml</DocumentationFile>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DocumentationFile>Bwl.RPi.Camera.RemoteReceiver.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -29,8 +29,8 @@
     <DefineDebug>false</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
-    <OutputPath>..\release\bwl-rpi-cam-test\</OutputPath>
-    <DocumentationFile>Bwl.RPi.Camera.TestVideo.xml</DocumentationFile>
+    <OutputPath>bin\Release\</OutputPath>
+    <DocumentationFile>Bwl.RPi.Camera.RemoteReceiver.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
@@ -51,6 +51,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
@@ -58,12 +59,20 @@
     <Import Include="System" />
     <Import Include="System.Collections" />
     <Import Include="System.Collections.Generic" />
+    <Import Include="System.Drawing" />
     <Import Include="System.Diagnostics" />
+    <Import Include="System.Windows.Forms" />
     <Import Include="System.Linq" />
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App.vb" />
+    <Compile Include="Receiver.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Receiver.Designer.vb">
+      <DependentUpon>Receiver.vb</DependentUpon>
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -87,6 +96,9 @@
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Receiver.resx">
+      <DependentUpon>Receiver.vb</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="My Project\Application.myapp">
@@ -98,12 +110,6 @@
       <CustomToolNamespace>My</CustomToolNamespace>
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Bwl.RPi.Camera\Bwl.RPi.Camera.vbproj">
-      <Project>{9c6217e4-aa6a-4f85-93f3-7b55e24d7c85}</Project>
-      <Name>Bwl.RPi.Camera</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
