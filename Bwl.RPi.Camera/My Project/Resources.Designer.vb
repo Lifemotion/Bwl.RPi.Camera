@@ -59,15 +59,5 @@ Namespace My.Resources
                 resourceCulture = value
             End Set
         End Property
-        
-        '''<summary>
-        '''  Поиск локализованного ресурса типа System.Byte[].
-        '''</summary>
-        Friend ReadOnly Property cat() As Byte()
-            Get
-                Dim obj As Object = ResourceManager.GetObject("cat", resourceCulture)
-                Return CType(obj,Byte())
-            End Get
-        End Property
     End Module
 End Namespace

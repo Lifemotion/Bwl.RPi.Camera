@@ -1,44 +1,33 @@
 ﻿Imports System.Diagnostics
-Imports System.Drawing
-Imports System.IO
-Imports Bwl.RPi.Camera
 
 Public Class RpiCamStill
     Implements IDisposable
     Implements IRpiCam
 
-    Private ReadOnly _prc As Process
-    Private ReadOnly _buffer As Byte()
-    Private _width As Integer
-    Private _height As Integer
-    Private _counter As Integer
+    Private _prc As Process
 
+    Public Event FrameReady(source As IRpiCam) Implements IRpiCam.FrameReady
+
+    Public ReadOnly Property FrameBytesSynclock As New Object Implements IRpiCam.FrameBytesSynclock
+    Public ReadOnly Property FrameBytesBuffer As Byte() = {} Implements IRpiCam.FrameBytesBuffer
+    Public ReadOnly Property FrameBytesFormat As RpiCamFrameType = RpiCamFrameType.bmp Implements IRpiCam.FrameBytesFormat
     Public ReadOnly Property FrameCounter As Integer Implements IRpiCam.FrameCounter
+
+    Public ReadOnly Property FrameBytesLength As Integer Implements IRpiCam.FrameBytesLength
         Get
-            Return _counter
+            Return FrameBytesBuffer.Length
         End Get
     End Property
 
-    Public ReadOnly Property LastFrameBytesLength As Integer Implements IRpiCam.LastFrameBytesLength
-
     Public Sub New()
-        Me.New(1920, 1080, "")
+
     End Sub
 
-    Public Sub New(width As Integer, height As Integer, options As String)
-        _width = width
-        _height = height
-        _buffer = New Byte((width * height * 3) + 53) {}
+    Public Sub Open(width As Integer, height As Integer, fps As Integer, options As String) Implements IRpiCam.Open
+        Close()
+
+        _FrameBytesBuffer = New Byte((width * height * 3) + 53) {}
         If System.Environment.OSVersion.Platform = PlatformID.Unix Then
-            Try
-                Dim prc As New Process
-                prc.StartInfo.FileName = "pkill"
-                prc.StartInfo.Arguments = "raspistill"
-                prc.Start()
-                prc.WaitForExit()
-            Catch ex As Exception
-            End Try
-            Threading.Thread.Sleep(500)
             _prc = New Process
             _prc.StartInfo.FileName = "raspistill"
             _prc.StartInfo.Arguments = "-e bmp -h " + height.ToString + " -w " + width.ToString + " -n -t 999999999 -k " + options + "-o -"
@@ -48,44 +37,32 @@ Public Class RpiCamStill
             _prc.StartInfo.UseShellExecute = False
             _prc.Start()
         Else
-
+            Throw New Exception("Not implemented on Windows")
         End If
     End Sub
 
-    Public Function GetFrameAsBitmap() As Bitmap Implements IRpiCam.GetFrameAsBitmap
-        Dim buff = GetFrameAsBytes()
-        Try
-            Using m = New MemoryStream(buff)
-                Return Bitmap.FromStream(m)
-            End Using
-        Catch
-            Return Nothing
-        End Try
-    End Function
+    Public Sub CaptureFrame() Implements IRpiCam.CaptureOrWaitFrame
+        SyncLock FrameBytesSynclock
+            If System.Environment.OSVersion.Platform = PlatformID.Unix Then
+                _prc.StandardOutput.DiscardBufferedData()
+                _prc.StandardInput.Write(vbLf)
 
-    Public Function GetFrameAsBytes() As Byte() Implements IRpiCam.GetFrameAsBytes
-        If System.Environment.OSVersion.Platform = PlatformID.Unix Then
-            _prc.StandardOutput.DiscardBufferedData()
-            _prc.StandardInput.Write(vbLf)
-
-            Dim start = Now
-            Dim totalBytes = 0
-            Do
-                totalBytes += _prc.StandardOutput.BaseStream.Read(_buffer, totalBytes, _buffer.Length - totalBytes)
-            Loop While totalBytes < _buffer.Length And (Now - start).TotalSeconds < 3
-            If totalBytes < _buffer.Length Then
-                Throw New Exception("Buffer not full, capture failed")
+                Dim start = Now
+                Dim totalBytes = 0
+                Do
+                    totalBytes += _prc.StandardOutput.BaseStream.Read(FrameBytesBuffer, totalBytes, FrameBytesBuffer.Length - totalBytes)
+                Loop While totalBytes < FrameBytesBuffer.Length And (Now - start).TotalSeconds < 3
+                If totalBytes < FrameBytesBuffer.Length Then
+                    Throw New Exception("Buffer not full, capture failed")
+                Else
+                    _FrameCounter += 1
+                End If
             Else
-                _counter += 1
-                _LastFrameBytesLength = _buffer.Length
-                Return _buffer
+                Throw New Exception("Not implemented on Windows")
             End If
-        Else
-            Dim testJpg = My.Resources.cat
-            _LastFrameBytesLength = testJpg.Length
-            Return testJpg
-        End If
-    End Function
+        End SyncLock
+        RaiseEvent FrameReady(Me)
+    End Sub
 
     ''' <summary>
     ''' Finishes raspistill
@@ -95,10 +72,27 @@ Public Class RpiCamStill
             _prc.Kill()
         Catch
         End Try
+
+        Try
+            Dim prc As New Process
+            prc.StartInfo.FileName = "pkill"
+            prc.StartInfo.Arguments = "raspistill"
+            prc.Start()
+            prc.WaitForExit()
+        Catch ex As Exception
+        End Try
+        Threading.Thread.Sleep(500)
     End Sub
 
-    Public Sub Dispose() Implements IDisposable.Dispose, IRpiCam.Dispose
+    Public Sub Dispose() Implements IDisposable.Dispose
         Close()
     End Sub
 
+    Public Function CreateBytesCopy() As Byte() Implements IRpiCam.CreateBytesCopy
+        SyncLock FrameBytesSynclock
+            Dim bytes(FrameBytesLength - 1) As Byte
+            Array.Copy(FrameBytesBuffer, bytes, bytes.Length)
+            Return bytes
+        End SyncLock
+    End Function
 End Class
